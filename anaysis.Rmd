@@ -1,0 +1,55 @@
+---
+title: "Analysis"
+author: "Kyle Andrews"
+date: "3/20/2021"
+output: html_document
+---
+
+```{r}
+##reading in data from desktop - 
+library(caret)
+library(imputeTS)
+library(e1071)
+library(ggplot2)
+df <- read.csv ("C:/Users/Kandr/Desktop/RDATAFINAL.csv")
+
+
+
+summary(df)
+
+##K Nearest Neighbors
+fold <- trainControl (method= "cv", number=10)
+model.knn <- train(Risk.Level ~ TRANSACTION.AMOUNT + Hour,
+                            data= df,
+                            trControl = fold,
+                            method = "knn")
+
+
+confusionMatrix (model.knn, norm = "none")
+
+
+
+##Support Vector Machine
+fold <- trainControl (method= "cv", number=10)
+model.svm <- train(Risk.Level ~ TRANSACTION.AMOUNT + Hour,
+                            data= df,
+                            trControl = fold,
+                            method = "svmLinear")
+model.svm
+
+confusionMatrix (model.svm, norm = "none")
+
+##Decision Tree Model
+
+fold <- trainControl (method= "cv", number=10)
+model.dt <- train(Risk.Level ~ TRANSACTION.AMOUNT + Hour,
+                            data= df,
+                            trControl = fold,
+                            method = "rpart")
+model.dt
+
+confusionMatrix (data = model.dt, norm = "none")
+
+
+
+```
